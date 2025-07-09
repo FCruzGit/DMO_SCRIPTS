@@ -1,5 +1,5 @@
 import dxcam, cv2, numpy as np
-import pyautogui, threading, keyboard, os, time, pygame, sys
+import pyautogui, threading, keyboard, os, time, pygame, sys, easyocr
 
 # ─── CONFIGS ────────────────────────────────
 
@@ -14,13 +14,15 @@ MACRO_INTERVALO = 30
 
 SFX_START = "DMO_SCRIPTS/sfx/start.wav"
 SFX_STOP = "DMO_SCRIPTS/sfx/stop.wav"
-SFX_ALARME_MACRO = "DMO_SCRIPTS/sfx/alarme_03.mp3"  
+SFX_ALARME_MACRO = "DMO_SCRIPTS/sfx/alarme_03.mp3"
 
 
-# Templates com categorias
+# Templates com categorias        
 TEMPLATE_INFO = [
-    {"path": "DMO_SCRIPTS/model/lillymon_boss.png", "tipo": "boss"},
-    {"path": "DMO_SCRIPTS/model/lillymon_common.png", "tipo": "common"}
+    #{"path": "DMO_SCRIPTS/model/cherrymon_common.png", "tipo": "common"},
+    #{"path": "DMO_SCRIPTS/model/woodmon_common.png", "tipo": "common"},
+    {"path": "DMO_SCRIPTS/model/candlemon_common.png", "tipo": "common"},
+    {"path": "DMO_SCRIPTS/model/demi-meramon_common.png", "tipo": "common"}
 ]
 
 # Estado
@@ -43,6 +45,8 @@ for info in TEMPLATE_INFO:
 camera = dxcam.create(region=(0, 0, 1920, 1080), output_color="BGR")
 camera.start()
 
+reader = easyocr.Reader(['en'], gpu=False)
+
 # ─── SFX ───────────────────────────────────
 
 def tocar_som(caminho):
@@ -56,7 +60,50 @@ def tocar_som(caminho):
 
 # ─── MACRO ─────────────────────────────────
 
-# Detectar o macro teste que vem um capcha para ser resolvido
+def tocar_alarme():
+    try:
+        pygame.mixer.music.load(SFX_ALARME_MACRO)
+        pygame.mixer.music.play()
+
+    except Exception as e:
+        print(f"Erro ao tocar alarme: {e}")
+
+import os
+from datetime import datetime
+
+def verificar_macro_loop():
+    ultimo_alerta = 0
+    cooldown = 60  # segundos
+
+    while True:
+        frame = camera.get_latest_frame()
+        if frame is not None:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            blur = cv2.GaussianBlur(gray, (3, 3), 0)
+            results = reader.readtext(blur)
+
+            for (text, confidence) in [(r[1], r[2]) for r in results]:
+                if "anti-macro on" in text.lower() and confidence > 0.7:
+                    if time.time() - ultimo_alerta > cooldown:
+                        print("🚨 Alerta: 'Anti-Macro On' detectado!")
+                        tocar_alarme()
+
+                        # Criar pasta de logs se não existir
+                        pasta_logs = "logs"
+                        os.makedirs(pasta_logs, exist_ok=True)
+
+                        # Nome da imagem com data/hora
+                        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                        caminho = os.path.join(pasta_logs, f"macro_report_{timestamp}.png")
+
+                        # Salvar screenshot
+                        cv2.imwrite(caminho, frame)
+                        print(f"🖼️ Screenshot salva em: {caminho}")
+
+                        ultimo_alerta = time.time()
+                    break
+        time.sleep(10)
+
 
 # ─── FUNÇÕES ──────────────────────────────
 
@@ -166,7 +213,6 @@ def monitorar_tecla():
 
         time.sleep(0.5)
 
-
 # ─── EXEC ────────────────────────────────
 
 if __name__ == "__main__":
@@ -175,6 +221,7 @@ if __name__ == "__main__":
     pygame.mixer.init()
 
     threading.Thread(target=monitorar_tecla, daemon=True).start()
+    threading.Thread(target=verificar_macro_loop, daemon=True).start()
 
     try:
         macro_loop()
