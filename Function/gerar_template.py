@@ -1,14 +1,17 @@
-import dxcam, uuid, cv2, time, keyboard, pygame, os
+import dxcam, uuid, cv2, time, keyboard, pygame, os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from Map.config import TEMPLATE_DIGIMON_ALVO, SFX_PATH
+from Map.config import SFX_PATH
 
 # Inicializa o mixer do pygame
 pygame.mixer.init()
-som_captura = pygame.mixer.Sound("DMO_SCRIPTS/sfx/print.wav")
+som_captura = pygame.mixer.Sound(SFX_PATH["Start"])
 
 # Região ajustada
 REGIAO_FOTO = [980, 30, 44, 40]  # x, y, w, h
 
 # Pasta de saída
-PASTA_SAIDA = "DMO_SCRIPTS/model"
+PASTA_SAIDA = "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo"
 os.makedirs(PASTA_SAIDA, exist_ok=True)
 
 # Inicia a câmera DXCam

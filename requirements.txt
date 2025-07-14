@@ -1,9 +1,15 @@
-dxcam==0.0.5
-numpy==1.24.4
-pyautogui==0.9.54
-keyboard==0.13.5
-pygame==2.5.2
+# Externo do PIP > PYTHON 3.11 e TESSERACT
 
-pip uninstall opencv-python
-pip install opencv-python-headless
-pip install opencv-contrib-python
+# Novo OCR
+prettycolorprinter
+pytesseract
+
+# Som 
+pygame
+
+# Controle Mouse ou Teclado
+keyboard
+pyautogui
+
+# Captura de Tela
+dxcam
