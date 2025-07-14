@@ -1,9 +1,12 @@
-MODULE_PATH = {
-    "ASSETS": "C:\_Desenvolvimento\Python\DMO_SCRIPTS\Assets",
-    "FUNCTION": "C:\_Desenvolvimento\Python\DMO_SCRIPTS\Function",
-    "MAP": "C:\_Desenvolvimento\Python\DMO_SCRIPTS\Map",
-    "SFX": "C:\_Desenvolvimento\Python\DMO_SCRIPTS\SFX",
-    "TEST": "C:\_Desenvolvimento\Python\DMO_SCRIPTS\TEST"
+TWO_CAPCHA_METHOD = {
+    "CREATE_URL": "https://api.2captcha.com/createTask",
+    "RESULT_URL": "https://api.2captcha.com/getTaskResult",
+    "REPORT_CORRECT": "https://api.2captcha.com/reportCorrect",
+    "REPORT_INCORRECT": "https://api.2captcha.com/reportIncorrect"
+}
+
+API_KEY = {
+    "KEY": "ff6268640f6ab8ebe060e6cd625061fd"
 }
 
 ASSETS_PATH = {

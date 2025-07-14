@@ -2,9 +2,11 @@ from pytesseract import pytesseract
 from datetime import datetime
 import dxcam, cv2, os, keyboard, time, pyautogui, base64, requests, pyperclip
 
-pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+pytesseract.tesseract_cmd = EXTERNAL_PATH["Tesseract"]
 
-def detectar_tipo_captcha_por_instrucao(caminho_img):
+img = "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Macro_filtrado\\macro_detectado_20250714_005109.png"
+
+def testar_ocr(caminho_img):
     imagem_bgr = cv2.imread(caminho_img)
     if imagem_bgr is None:
         raise ValueError(f"Erro ao carregar imagem: {caminho_img}")
@@ -34,5 +36,4 @@ def detectar_tipo_captcha_por_instrucao(caminho_img):
     else:
         return "Enter only the characters that match the instruction below the image"
 
-    
-detectar_tipo_captcha_por_instrucao("C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Macro_filtrado\\macro_detectado_20250714_005109.png")
+testar_ocr(img)

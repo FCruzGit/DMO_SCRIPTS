@@ -1,5 +1,7 @@
 # Externo do PIP > PYTHON 3.11 e TESSERACT
 
+# Download Tesseract Installer > https://github.com/UB-Mannheim/tesseract/wiki
+
 # Novo OCR
 prettycolorprinter
 pytesseract

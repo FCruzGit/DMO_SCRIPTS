@@ -6,10 +6,10 @@ import pygame
 
 # Inicializa o mixer do pygame
 pygame.mixer.init()
-pygame.mixer.music.load("DMO_SCRIPTS/sfx/print.wav")
+pygame.mixer.music.load(SFX_PATH["Print"])
 
 # Região inicial — ajuste conforme necessário
-REGIAO_FOTO = [0, 0, 1920, 1080]  # x, y, w, h
+REGIAO_FOTO = [0, 0, 1920, 1080]
 
 # Inicia a câmera DXCam
 camera = dxcam.create(output_color="BGR")
@@ -35,10 +35,10 @@ try:
             if not pygame.mixer.music.get_busy():
                 pygame.mixer.music.play()
                 print("📸 Som de captura tocado.")
-                time.sleep(0.5)  # Evita múltiplos toques
+                time.sleep(0.5)
 
         key = cv2.waitKey(1)
-        if key == 27:  # ESC
+        if key == 27:
             break
 
     cv2.destroyAllWindows()
