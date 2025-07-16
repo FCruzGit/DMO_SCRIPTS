@@ -5,7 +5,7 @@ from Map.config import TEMPLATE_DIGIMON_ALVO, SFX_PATH
 from Map.mapeamento_1920x1080 import ENEMY_DIGIMON_HP, ENEMY_DIGIMON_SELECIONADO
 from anti_macro import identificar_teste_macro
 
-DIGIMONS_PROCURADOS = ["kunemon", "dokunemon"] 
+DIGIMONS_PROCURADOS = ["kunemon", "dokunemon", "candlemon", "demi-meramon"] 
 
 camera = dxcam.create()
 
@@ -18,7 +18,7 @@ def capturar_roi(frame, region):
 def acao_verificar_macro(tempo_inicial, intervalo=10):
     tempo_decorrido = time.time() - tempo_inicial
     if tempo_decorrido >= intervalo:
-        print("[1️⃣] Verificando macro...")
+        print("[INFO] Verificando tela contra macro")         
         identificar_teste_macro()
         return time.time()
     return tempo_inicial

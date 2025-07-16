@@ -5,9 +5,9 @@ from datetime import datetime
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Map.config import SFX_PATH
 
-pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
-
 camera = dxcam.create()
+
+pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 resolucoes_automaticas = 0
 
@@ -23,10 +23,11 @@ def responder_capcha_interface(texto, x, y):
     print(f"[INFO] Posicionando mouse em ({x}, {y}) e respondendo capcha com: {texto}")
     pyperclip.copy(texto)
     pyautogui.moveTo(x, y, duration=0.3)
+    time.sleep(0.3)
     pyautogui.click(button='left')
-    time.sleep(0.2)
+    time.sleep(0.3)
     pyautogui.write(texto, interval=0.05)
-    time.sleep(0.2)
+    time.sleep(0.3)
     pyautogui.press("enter")
     time.sleep(10)
     identificar_teste_macro()
@@ -173,7 +174,7 @@ def identificar_teste_macro():
 
             try:
                 # CHAMA VERIFICACAO MANUAL SE DER ERRADO 3 VEZES
-                if resolucoes_automaticas >=3:
+                if resolucoes_automaticas == 4:
                     som_aviso.play()
                     print("[WARN] Limite de tentativas alcancado, aguardando input manual")
                     time.sleep(7)
