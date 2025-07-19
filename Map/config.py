@@ -39,5 +39,8 @@ TEMPLATE_DIGIMON_ALVO = [
     {"name": "betamon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\betamon_common.png"},
     {"name": "darkknightmon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\darkknightmon_common.png"},
     {"name": "kunemon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\kunemon_common.png"},
-    {"name": "dokunemon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\dokunemon_common.png"}
+    {"name": "dokunemon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\dokunemon_common.png"},
+    {"name": "palmon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\palmon_common.png"},
+    {"name": "tanemon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\tanemon_common.png"},
+    {"name": "grandracmon", "type": "common", "path": "C:\\_Desenvolvimento\\Python\\DMO_SCRIPTS\\Assets\\Template_digimon_alvo\\grandracmon_common.png"}
 ]

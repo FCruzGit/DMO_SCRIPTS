@@ -1,4 +1,4 @@
-import cv2, os, time, pyautogui, base64, requests, pyperclip, pygame, sys, dxcam
+import cv2, os, time, pyautogui, base64, requests, pyperclip, pygame, sys, dxcam, pydirectinput
 from pytesseract import pytesseract
 from datetime import datetime
 
@@ -22,13 +22,15 @@ def image_to_base64(path):
 def responder_capcha_interface(texto, x, y):
     print(f"[INFO] Posicionando mouse em ({x}, {y}) e respondendo capcha com: {texto}")
     pyperclip.copy(texto)
-    pyautogui.moveTo(x, y, duration=0.3)
+    pydirectinput.moveTo(x, y)
     time.sleep(0.3)
-    pyautogui.click(button='left')
-    time.sleep(0.3)
-    pyautogui.write(texto, interval=0.05)
-    time.sleep(0.3)
-    pyautogui.press("enter")
+    pydirectinput.click()
+    time.sleep(0.5)
+    # Digitar caractere por caractere para evitar bloqueio
+    for char in texto:
+        pydirectinput.press(char)
+        time.sleep(0.05)
+    pydirectinput.press("enter")
     time.sleep(10)
     identificar_teste_macro()
 
@@ -45,7 +47,7 @@ def solicitar_resposta_API(image_path, desafio):
             "type": "ImageToTextTask",
             "body": image_b64,
             "phrase": False,
-            "case": False,
+            "case": True,
             "numeric": 0,
             "math": False,
             "minLength": 0,
@@ -174,18 +176,21 @@ def identificar_teste_macro():
 
             try:
                 # CHAMA VERIFICACAO MANUAL SE DER ERRADO 3 VEZES
-                if resolucoes_automaticas == 4:
+                if resolucoes_automaticas == 3:
                     som_aviso.play()
                     print("[WARN] Limite de tentativas alcancado, aguardando input manual")
                     time.sleep(7)
                     sys.exit()
 
-                resolucoes_automaticas += 1
-                print(f"[WARN] NUMERO DE TENTATIVAS: {resolucoes_automaticas}")
-                texto_captcha = solicitar_resposta_API(print_filtrado, desafio)
-                print(f"[INFO] API retornou a resposta: {texto_captcha}")
-                responder_capcha_interface(texto_captcha, x_macro, y_macro)
-                
+                else:
+                    som_aviso.play()
+                    time.sleep(7)
+                    #resolucoes_automaticas += 1
+                    #print(f"[WARN] NUMERO DE TENTATIVAS: {resolucoes_automaticas}")
+                    #texto_captcha = solicitar_resposta_API(print_filtrado, desafio)
+                    #print(f"[INFO] API retornou a resposta: {texto_captcha}")
+                    #responder_capcha_interface(texto_captcha, x_macro, y_macro)         
+       
             except Exception as e:
                 print(f"[ERROR] Não foi possível resolver ou responder o Capcha: {e}")
                 sys.exit()

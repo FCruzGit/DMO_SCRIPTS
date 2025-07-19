@@ -2,20 +2,32 @@ import pyautogui, threading, keyboard, os, time, pygame, sys, dxcam, cv2, numpy 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Map.config import TEMPLATE_DIGIMON_ALVO, SFX_PATH
-from Map.mapeamento_1920x1080 import ENEMY_DIGIMON_HP, ENEMY_DIGIMON_SELECIONADO
+from Map.mapeamento_1920x1080 import ENEMY_DIGIMON_SELECIONADO
 from anti_macro import identificar_teste_macro
 
-DIGIMONS_PROCURADOS = ["kunemon", "dokunemon", "candlemon", "demi-meramon"] 
+DIGIMONS_PROCURADOS = ["grandracmon"] 
 
 camera = dxcam.create()
 
+pygame.mixer.init()
+
+som_ativar = pygame.mixer.Sound(SFX_PATH["Start"])
+som_desativar = pygame.mixer.Sound(SFX_PATH["Stop"])
+
 script_ativo = False
 
-def capturar_roi(frame, region):                    
+def pressionar_tecla_6():
+    while True:
+        time.sleep(180)  # Espera 3 minutos
+        if script_ativo:  # Só pressiona se o script estiver ativo
+            print("[INFO] Pressionando tecla 6 (buff/heal).")
+            pyautogui.press('6')
+
+def capturar_roi(frame, region):                           
     x, y, w, h = region
     return frame[y:y+h, x:x+w]
 
-def acao_verificar_macro(tempo_inicial, intervalo=10):
+def acao_verificar_macro(tempo_inicial, intervalo=30):
     tempo_decorrido = time.time() - tempo_inicial
     if tempo_decorrido >= intervalo:
         print("[INFO] Verificando tela contra macro")         
@@ -26,7 +38,7 @@ def acao_verificar_macro(tempo_inicial, intervalo=10):
 def verificar_digimon_selecionado():
     print("[INFO] Iniciando verificação por template...")
     tempo_inicial = time.time()
-    tempo_maximo = 10
+    tempo_maximo = 30
     tentativas = 0
 
     templates_alvo = []
@@ -72,16 +84,16 @@ def verificar_digimon_selecionado():
         if not encontrado:
             print("[INFO] Alvo não é desejado. Trocando com TAB...")
             pyautogui.press('tab')
-            time.sleep(0.3)
+            time.sleep(0.1)             
             tentativas += 1
 
         if tentativas >= 5:
             print("[INFO] Nenhum alvo válido encontrado. Girando câmera...")
             pyautogui.mouseDown(button='right')
-            pyautogui.moveRel(150, 0, duration=0.2)
+            pyautogui.moveRel(450, 0, duration=0.1)
             pyautogui.mouseUp(button='right')
             tentativas = 0
-            time.sleep(1)
+            time.sleep(0.2)
 
         tempo_decorrido = time.time() - tempo_inicial
         if tempo_decorrido >= tempo_maximo:
@@ -90,13 +102,6 @@ def verificar_digimon_selecionado():
             tempo_inicial = time.time()
 
 def script_atacar_por_template():
-
-    pygame.mixer.init()
-
-    som_ativar = pygame.mixer.Sound(SFX_PATH["Start"])
-    som_desativar = pygame.mixer.Sound(SFX_PATH["Stop"])
-
-    print("[INFO] PARAMETROS GERAIS INICIALIZADOS")
 
     try:
         verificar_digimon_selecionado()
@@ -114,16 +119,18 @@ def monitorar_tecla():
 
         if script_ativo:
             print("\n✅ Script ATIVADO (Espaço pressionado)\n")
+            som_ativar.play()
             threading.Thread(target=script_atacar_por_template, daemon=True).start()
         else:
             print("\n⛔ Script DESATIVADO (Espaço pressionado)\n")
-
+            som_desativar.play()
         time.sleep(0.5)
 
 # Início do monitoramento
 if __name__ == "__main__":
     print("▶️ Pressione ESPAÇO para ativar/desativar o script.")
     threading.Thread(target=monitorar_tecla, daemon=True).start()
+    threading.Thread(target=pressionar_tecla_6, daemon=True).start()
 
     while True:
         time.sleep(1)  # Mantém o script vivo

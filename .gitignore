@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+./Python/DMO_SCRIPTS/Assets/Macro_logs
+./Python/DMO_SCRIPTS/Assets/Macro_filtrado
+
 # Distribution / packaging
 .Python
 build/
