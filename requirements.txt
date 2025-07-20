@@ -15,3 +15,9 @@ pyautogui
 
 # Captura de Tela
 dxcam
+
+numpy
+requests
+pydirectinput
+
+pandas
